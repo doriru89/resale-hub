@@ -62,7 +62,7 @@ export const Hook: React.FC = () => {
 export const Intro: React.FC = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const a = spring({frame: f, fps, config: {damping: 20}});
+  const a = spring({frame: f, fps, config: {stiffness: 400, damping: 40}});
   const b = a, c = a;
   return (
     <Scene>
@@ -88,13 +88,10 @@ export const Roll: React.FC = () => {
   const cols = 15, cell = 100, gx = 210, gy = 230;
   const counters = items.map(() => 0);
   const sortStart = 72;
-  const label = fade(f, sortStart + 50, sortStart + 72);
   return (
     <Scene>
       <Step n={1} title="Sort the camera roll" who="Claude groups photos into items" />
-      <div style={{position: 'absolute', right: 80, top: 70, fontSize: 32, fontWeight: 700, color: C.muted}}>
-        {f < sortStart + 40 ? `Camera roll · ${ALL.length} photos` : `${ALL.length} photos → ${items.length} items`}
-      </div>
+      <Counter sorted={f >= sortStart + 40} />
       {ALL.map((x, i) => {
         const k = counters[x.item]++;
         const appear = spring({frame: f - i * 0.5, fps, config: {damping: 15}});
@@ -109,18 +106,30 @@ export const Roll: React.FC = () => {
             boxShadow: move > 0.5 ? '0 2px 6px rgba(0,0,0,.25)' : 'none', zIndex: k}} />
         );
       })}
-      {items.map((it, slot) => (
-        <div key={it.uid} style={{position: 'absolute', left: SX + (slot % 7) * (STACK_W + 24), top: SY + Math.floor(slot / 7) * 370 + 205,
-          width: STACK_W, textAlign: 'center', opacity: label}}>
-          <div style={{fontSize: 23, fontWeight: 700, lineHeight: 1.2}}>{it.name}</div>
-          <div style={{display: 'inline-block', marginTop: 6, fontSize: 18, fontWeight: 600, color: C.accent, background: C.accentSoft, borderRadius: 12, padding: '2px 12px'}}>
-            {it.cat} · {it.photos.length}
-          </div>
-        </div>
-      ))}
+      <StackLabels opacity={fade(f, sortStart + 44, sortStart + 56)} />
     </Scene>
   );
 };
+
+const Counter: React.FC<{sorted: boolean; opacity?: number}> = ({sorted, opacity = 1}) => (
+  <div style={{position: 'absolute', right: 80, top: 70, fontSize: 32, fontWeight: 700, color: C.muted, opacity}}>
+    {sorted ? `${ALL.length} photos → ${items.length} items` : `Camera roll · ${ALL.length} photos`}
+  </div>
+);
+
+const StackLabels: React.FC<{opacity: number}> = ({opacity}) => (
+  <>
+    {items.map((it, slot) => (
+      <div key={it.uid} style={{position: 'absolute', left: SX + (slot % 7) * (STACK_W + 24), top: SY + Math.floor(slot / 7) * 370 + 205,
+        width: STACK_W, textAlign: 'center', opacity}}>
+        <div style={{fontSize: 23, fontWeight: 700, lineHeight: 1.2}}>{it.name}</div>
+        <div style={{display: 'inline-block', marginTop: 6, fontSize: 18, fontWeight: 600, color: C.accent, background: C.accentSoft, borderRadius: 12, padding: '2px 12px'}}>
+          {it.cat} · {it.photos.length}
+        </div>
+      </div>
+    ))}
+  </>
+);
 
 // Three stacks rise; one agent names each item from a specific photo, another looks up
 // the original price for taxes later. The third item needs a human answer.
@@ -128,8 +137,9 @@ const FOUND = [
   {at: 52, name: 'DJI Mavic Air 2 Fly More Combo', from: 'photo 1: drone, RC-N1 controller, 3 batteries, charging hub', photo: 'img/roll/R116-1.jpg', ok: true},
   {at: 96, name: 'OnePlus Open, 16 GB / 512 GB', from: 'photo 14: the battery-health screen in Settings', photo: 'img/roll/R121-14.jpg', ok: true},
   {at: 140, name: 'Razer Kishi: V3 Pro or V3?', from: 'The back label isn’t in any of the 6 photos.', photo: 'img/roll/R117-1.jpg', ok: false},
+  {at: 213, name: 'Razer Kishi V3 Pro', from: 'your answer: the box in photo 6', photo: 'img/roll/R117-1.jpg', ok: true},
 ];
-const MSRP = [{at: 80, n: 'Mavic Air 2 Fly More Combo', v: '$988'}, {at: 122, n: 'OnePlus Open 512 GB', v: '$1,699.99'}, {at: 229, n: 'Razer Kishi V3 Pro', v: '$149.99'}];
+const MSRP = [{at: 80, n: 'Mavic Air 2 Fly More Combo', v: '$988'}, {at: 122, n: 'OnePlus Open 512 GB', v: '$1,699.99'}, {at: 218, n: 'Razer Kishi V3 Pro', v: '$149.99'}];
 
 export const Identify: React.FC = () => {
   const f = useCurrentFrame();
@@ -139,9 +149,14 @@ export const Identify: React.FC = () => {
   const card = FOUND.filter((c) => f >= c.at).pop();
   const waiting = f >= 150 && f < 213;
   const answered = f >= 213;
+  const exit = 1 - fade(f, 234, 248);
   return (
     <Scene>
+      <Counter sorted opacity={1 - fade(f, 0, 10)} />
+      <StackLabels opacity={1 - fade(f, 0, 10)} />
+      <div style={{position: 'absolute', inset: 0, opacity: exit}}>
       <Step n={2} title="Identify each item" who="One agent names it from the photos. Another finds the original price" />
+      </div>
       {items.map((it, slot) => {
         const j = PICKS.indexOf(it.uid);
         return it.photos.slice(0, 5).map((p, k) => {
@@ -149,9 +164,10 @@ export const Identify: React.FC = () => {
           if (j < 0) return <Img key={p} src={asset(p)} style={{position: 'absolute', left: a.x, top: a.y, width: THUMB, height: THUMB, objectFit: 'cover', borderRadius: 10, opacity: 1 - fade(f, 0, 12)}} />;
           const b = pickXY(j, k);
           return <Img key={p} src={asset(p)} style={{position: 'absolute', left: interpolate(lift, [0, 1], [a.x, b.x]), top: interpolate(lift, [0, 1], [a.y, b.y]), width: THUMB, height: THUMB,
-            objectFit: 'cover', borderRadius: 10, zIndex: k, transform: `rotate(${((k % 3) - 1) * 4}deg)`, boxShadow: '0 2px 6px rgba(0,0,0,.25)'}} />;
+            objectFit: 'cover', borderRadius: 10, zIndex: k, opacity: j === 0 && k === 0 ? 1 : exit, transform: `rotate(${((k % 3) - 1) * 4}deg)`, boxShadow: '0 2px 6px rgba(0,0,0,.25)'}} />;
         });
       })}
+      <div style={{position: 'absolute', inset: 0, opacity: exit * fade(f, 8, 22), transform: `translateY(${(1 - fade(f, 8, 22)) * 30}px)`}}>
       {PICKS.map((uid, j) => {
         const c = FOUND[j];
         const named = j < 2 ? f >= c.at + 8 : answered;
@@ -200,8 +216,9 @@ export const Identify: React.FC = () => {
         </div>
         <Robot style={{position: 'absolute', left: 190, top: 330}} size={170} f={f + 13} />
       </div>
-      <div style={{position: 'absolute', left: 120, bottom: 40, fontFamily: MONO, fontSize: 22, color: C.ok, opacity: fade(f, 229, 241)}}>
+      <div style={{position: 'absolute', left: 120, bottom: 40, fontFamily: MONO, fontSize: 22, color: C.ok, opacity: fade(f, 220, 230)}}>
         ✓ folders created · items/R116-dji-mavic-air-2 · R121-oneplus-open · R117-razer-kishi-v3-pro
+      </div>
       </div>
     </Scene>
   );

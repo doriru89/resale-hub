@@ -4,7 +4,7 @@
 
 [![Resale Hub: Claude pauses with "Waiting for you" when it can't tell a model from the photos](docs/media/poster.jpg)](https://doriru89.github.io/resale-hub/)
 
-**[▶ Watch the 54-second demo](https://doriru89.github.io/resale-hub/)** · [MP4](docs/media/resale-hub.mp4)
+**[▶ Watch the 50-second demo](https://doriru89.github.io/resale-hub/)** · [MP4](docs/media/resale-hub.mp4)
 
 A drone. An old phone. Earbuds, hard drives, a pasta maker. I always said I'd sell
 them, and I never did, because every item means a listing on three sites, a price

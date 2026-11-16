@@ -21,11 +21,12 @@ export const Price: React.FC = () => {
   const move = spring({frame: f, fps, config: {damping: 22}});
   const start = pickXY(0, 0);
   const scroll = interpolate(f, [12, 120], [0, -1040], {...clamp, easing: (t) => t * t * (3 - 2 * t)});
+  const win = fade(f, 0, 10);
   const found = Math.min(PAID.length, Math.max(0, Math.floor((f - 14) / 11)));
   return (
     <Scene>
       <Step n={3} title="Find what it really sells for" who="Claude reads eBay’s sold listings in your browser" />
-      <div style={{position: 'absolute', left: 80, top: 180, width: 1110, height: 850, borderRadius: 14, overflow: 'hidden', boxShadow: '0 12px 40px rgba(0,0,0,.18)', background: '#fff'}}>
+      <div style={{position: 'absolute', left: 80, top: 180, width: 1110, height: 850, opacity: win, transform: `translateY(${(1 - win) * 30}px)`, borderRadius: 14, overflow: 'hidden', boxShadow: '0 12px 40px rgba(0,0,0,.18)', background: '#fff'}}>
         <div style={{height: 84, display: 'flex', alignItems: 'center', gap: 22, padding: '0 24px', borderBottom: `1px solid ${C.line}`, background: '#fff', position: 'relative', zIndex: 2}}>
           <Wordmark site="ebay" size={52} />
           <div style={{flex: 1, border: '2px solid #191919', borderRadius: 26, padding: '10px 20px', fontSize: 24}}>dji mavic air 2 fly more combo</div>
@@ -36,7 +37,7 @@ export const Price: React.FC = () => {
           Playwright · signed-in browser
         </div>
       </div>
-      <div style={{position: 'absolute', left: 1240, top: 180, right: 80, display: 'flex', flexDirection: 'column', gap: 18}}>
+      <div style={{position: 'absolute', left: 1240, top: 180, right: 80, display: 'flex', flexDirection: 'column', gap: 18, opacity: win}}>
         <div style={{height: 300}} />
         <Card style={{padding: '16px 22px'}}>
           <div style={{fontSize: 20, fontWeight: 800, color: C.muted}}>SAME KIT, SOLD THIS MONTH</div>
@@ -54,7 +55,7 @@ export const Price: React.FC = () => {
       </div>
       <Img src={asset('img/roll/R116-1.jpg')} style={{position: 'absolute', borderRadius: 14, objectFit: 'cover', boxShadow: '0 4px 14px rgba(0,0,0,.25)',
         left: interpolate(move, [0, 1], [start.x, 1240]), top: interpolate(move, [0, 1], [start.y, 180]),
-        width: interpolate(move, [0, 1], [150, 600]), height: interpolate(move, [0, 1], [150, 300])}} />
+        width: interpolate(move, [0, 1], [150, 600]), height: interpolate(move, [0, 1], [150, 300]), transform: `rotate(${-4 * (1 - move)}deg)`}} />
       <div style={{position: 'absolute', left: 1256, top: 440, color: '#fff', fontSize: 26, fontWeight: 800, textShadow: '0 1px 8px rgba(0,0,0,.8)', opacity: fade(f, 14, 24)}}>
         DJI Mavic Air 2 Fly More Combo
       </div>

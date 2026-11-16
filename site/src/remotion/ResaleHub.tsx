@@ -1,23 +1,28 @@
 import React from 'react';
-import {Series} from 'remotion';
+import {TransitionSeries, linearTiming} from '@remotion/transitions';
+import {fade} from '@remotion/transitions/fade';
 import {AssetCtx} from './theme';
 import {Hook, Identify, Intro, Roll} from './scenes-open';
 import {Books, Drafts, End, Price, PublishSold} from './scenes-close';
 
-export const SCENES: [React.FC, number][] = [
-  [Hook, 175], [Intro, 75], [Roll, 200], [Identify, 255], [Price, 180],
-  [Drafts, 165], [PublishSold, 165], [Books, 270], [End, 120],
+// [scene, frames, crossfade into the next]. Roll → Identify → Price carry the same
+// photos across the cut, so they join without a fade; Hook → Intro is a hard cut on purpose.
+const XF = 12;
+export const SCENES: [React.FC, number, boolean][] = [
+  [Hook, 175, false], [Intro, 77, true], [Roll, 145, false], [Identify, 252, false], [Price, 180, true],
+  [Drafts, 165, true], [PublishSold, 165, true], [Books, 270, true], [End, 120, false],
 ];
-export const DURATION = SCENES.reduce((a, [, d]) => a + d, 0);
+export const DURATION = SCENES.reduce((a, [, d, x]) => a + d - (x ? XF : 0), 0);
 export const FPS = 30;
 
 export const ResaleHub: React.FC<{asset?: (p: string) => string}> = ({asset}) => {
   const body = (
-    <Series>
-      {SCENES.map(([S, d], i) => (
-        <Series.Sequence key={i} durationInFrames={d}><S /></Series.Sequence>
-      ))}
-    </Series>
+    <TransitionSeries>
+      {SCENES.flatMap(([S, d, x], i) => [
+        <TransitionSeries.Sequence key={i} durationInFrames={d}><S /></TransitionSeries.Sequence>,
+        ...(x ? [<TransitionSeries.Transition key={`t${i}`} presentation={fade()} timing={linearTiming({durationInFrames: XF})} />] : []),
+      ])}
+    </TransitionSeries>
   );
   return asset ? <AssetCtx.Provider value={asset}>{body}</AssetCtx.Provider> : body;
 };
