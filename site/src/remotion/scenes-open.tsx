@@ -87,7 +87,7 @@ export const Roll: React.FC = () => {
   const asset = useAsset();
   const cols = 15, cell = 100, gx = 210, gy = 230;
   const counters = items.map(() => 0);
-  const sortStart = 72;
+  const sortStart = 46; // the moment the last photo lands
   return (
     <Scene>
       <Step n={1} title="Sort the camera roll" who="Claude groups photos into items" />

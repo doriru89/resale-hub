@@ -20,9 +20,9 @@ export const Price: React.FC = () => {
   const asset = useAsset();
   const move = spring({frame: f, fps, config: {damping: 22}});
   const start = pickXY(0, 0);
-  const scroll = interpolate(f, [12, 120], [0, -1040], {...clamp, easing: (t) => t * t * (3 - 2 * t)});
+  const scroll = interpolate(f, [12, 105], [0, -1040], {...clamp, easing: (t) => t * t * (3 - 2 * t)});
   const win = fade(f, 0, 10);
-  const found = Math.min(PAID.length, Math.max(0, Math.floor((f - 14) / 11)));
+  const found = Math.min(PAID.length, Math.max(0, Math.floor((f - 14) / 9.5)));
   return (
     <Scene>
       <Step n={3} title="Find what it really sells for" who="Claude reads eBay’s sold listings in your browser" />
@@ -42,13 +42,13 @@ export const Price: React.FC = () => {
         <Card style={{padding: '16px 22px'}}>
           <div style={{fontSize: 20, fontWeight: 800, color: C.muted}}>SAME KIT, SOLD THIS MONTH</div>
           <div style={{fontSize: 46, fontWeight: 800}}>{found} sales</div>
-          <div style={{fontSize: 20, color: C.muted, opacity: fade(f, 118, 128)}}>Dropped: parts-only and drone-only listings</div>
+          <div style={{fontSize: 20, color: C.muted, opacity: fade(f, 103, 113)}}>Dropped: parts-only and drone-only listings</div>
         </Card>
-        <div style={{display: 'flex', gap: 14, opacity: fade(f, 120, 135)}}>
+        <div style={{display: 'flex', gap: 14, opacity: fade(f, 105, 120)}}>
           <Chip k="Floor (25th pct)" v={money(Math.round(pct(PAID, 0.25)))} />
           <Chip k="Median" v={money(Math.round(pct(PAID, 0.5)))} />
         </div>
-        <Card style={{padding: '14px 22px', opacity: fade(f, 140, 155)}}>
+        <Card style={{padding: '14px 22px', opacity: fade(f, 125, 140)}}>
           <Row k="Facebook" v="$390" note="local cash, no fees" />
           <Row k="eBay" v="$425" note="buyer pays shipping" />
         </Card>
@@ -160,23 +160,23 @@ export const PublishSold: React.FC = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const asset = useAsset();
-  const later = fade(f, 78, 92);
+  const later = fade(f, 74, 84);
   const cx = interpolate(f, [8, 34], [1500, 1080], clamp), cy = interpolate(f, [8, 34], [1060, 952], clamp);
   const clicked = f >= 38;
   return (
     <Scene>
       <div style={{opacity: 1 - later}}><Step n={5} title="You press Publish" who="One review, one click. Only you post." human /></div>
-      <div style={{opacity: later, position: 'absolute', inset: 0}}>{f >= 78 && <Step n={6} title="Two weeks later" who="Most of it sold" human />}</div>
+      <div style={{opacity: later, position: 'absolute', inset: 0}}>{f >= 74 && <Step n={6} title="Two weeks later" who="Most of it sold" human />}</div>
       <div style={{position: 'absolute', left: 80, right: 80, top: 190, display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 20}}>
         {items.map((it, i) => {
           const live = spring({frame: f - 40 - i * 1.5, fps, config: {damping: 14}});
-          const sold = spring({frame: f - 92 - i * 3, fps, config: {damping: 12}});
+          const sold = spring({frame: f - 86 - i * 3, fps, config: {damping: 12}});
           return (
             <div key={it.uid} style={{position: 'relative'}}>
               <Img src={asset(it.photos[0])} style={{width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 12}} />
               <span style={{position: 'absolute', right: 10, top: 10, fontSize: 16, fontWeight: 800, padding: '3px 10px', borderRadius: 6,
                 background: live > 0.5 ? C.ok : C.accentSoft, color: live > 0.5 ? '#fff' : C.accent, opacity: 1 - later}}>{live > 0.5 ? 'LIVE' : 'DRAFT'}</span>
-              {f >= 92 && <Stamp p={sold} style={{left: 12, top: 12}} />}
+              {f >= 86 && <Stamp p={sold} style={{left: 12, top: 12}} />}
               <div style={{fontSize: 20, fontWeight: 700, marginTop: 6}}>{it.name}</div>
             </div>
           );
@@ -189,9 +189,9 @@ export const PublishSold: React.FC = () => {
       <svg width="44" height="54" viewBox="0 0 22 27" style={{position: 'absolute', left: cx, top: cy, opacity: 1 - fade(f, 60, 70), filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.35))'}}>
         <path d="M1 1 L1 22 L7 16 L11 25 L15 23 L11 15 L19 15 Z" fill="#fff" stroke="#1c1e21" strokeWidth="1.6" strokeLinejoin="round" />
       </svg>
-      <Clock f={f} from={66} to={98} />
-      {f >= 125 && (
-        <div style={{position: 'absolute', right: 80, top: 930, opacity: fade(f, 125, 135), background: C.accent, color: '#fff', borderRadius: 24, padding: '16px 26px', fontSize: 30}}>
+      <Clock f={f} from={68} to={88} />
+      {f >= 118 && (
+        <div style={{position: 'absolute', right: 80, top: 930, opacity: fade(f, 118, 128), background: C.accent, color: '#fff', borderRadius: 24, padding: '16px 26px', fontSize: 30}}>
           <b style={{opacity: 0.75, fontSize: 21, marginRight: 10}}>You</b>Most of it sold. Update my sales.
         </div>
       )}
@@ -224,84 +224,129 @@ const Clock: React.FC<{f: number; from: number; to: number}> = ({f, from, to}) =
 };
 
 const D = {bg: '#0f1115', panel: '#171a21', line: '#2a2f3e', text: '#e8eaf0', dim: '#8b92a5', accent: '#ffb454', green: '#87d96c', red: '#f07178', blue: '#5ccfe6'};
-const SALES: [string, string, string, number, number, boolean][] = [
-  ['R116', 'DJI Mavic Air 2', 'eBay', 362.13, 988, true],
-  ['R121', 'OnePlus Open', 'Facebook', 400, 1699.99, false],
-  ['R117', 'Razer Kishi V3 Pro', 'eBay', 53.96, 149.99, true],
-  ['R104', 'Galaxy Buds4', 'eBay', 78.19, 179.99, true],
-  ['R108', 'Insta360 X3', 'Facebook', 155, 449.99, false],
-  ['R118', 'NuPhy Air75 V2', 'Facebook', 59, 119.95, false],
-];
-const CHECKS = [
-  'Every eBay order matches a record, to the cent',
-  'Guessed cost and sale ≥ 60% of it → ask for the receipt',
-  'Personal item sold at a loss → not income',
-  'Any sale above cost → Form 8949',
-  'Loss sales on a 1099-K → backed out on Schedule 1',
+const RECORDED: [string, string, string, number][] = [
+  ['R116', 'DJI Mavic Air 2', 'eBay', 362.13], ['R121', 'OnePlus Open', 'Facebook', 400], ['R104', 'Galaxy Buds4', 'eBay', 78.19],
+  ['R110', 'WD easystore 4TB', 'Facebook', 65], ['R117', 'Razer Kishi V3 Pro', 'eBay', 53.96], ['R118', 'NuPhy Air75 V2', 'Facebook', 59],
 ];
 
-// Step 7: the sales get recorded, the view flips to tax, checks pass, photos go.
+// Four real 2026 sales, each walked through the rules. `hits` are the rule indexes it lights.
+type Verdict = {id: string; name: string; where: string; got: number; cost: number; src: string; why: string; to: 'sched1' | 'none'; hits: number[]};
+const VERDICTS: Verdict[] = [
+  {id: 'R116', name: 'DJI Mavic Air 2', where: 'eBay', got: 362.13, cost: 988, src: 'MSRP', to: 'sched1', hits: [1, 2],
+    why: 'Loss. eBay’s 1099-K will show $446.42 (price + shipping), not the $362.13 paid out, so $446.42 is backed out.'},
+  {id: 'R121', name: 'OnePlus Open', where: 'Facebook', got: 400, cost: 1699.99, src: 'MSRP', to: 'none', hits: [1],
+    why: 'Loss, paid in cash, no 1099-K. Nothing to report.'},
+  {id: 'R104', name: 'Galaxy Buds4, sealed', where: 'eBay', got: 78.19, cost: 179.99, src: 'MSRP', to: 'sched1', hits: [3, 1, 2],
+    why: 'Cost is only MSRP. The payout is 43% of it, under 60%, so no receipt needed. Loss.'},
+  {id: 'R110', name: 'WD easystore 4TB', where: 'Facebook', got: 65, cost: 149, src: 'you', to: 'none', hits: [1],
+    why: 'Cost from your memory. $65 is far below it. Loss, cash, nothing to report.'},
+];
+const RULES = [
+  'Every eBay order matches a record, to the cent. Otherwise no table.',
+  'Personal item sold below cost: not income.',
+  'On a 1099-K anyway: the gross is backed out on Schedule 1.',
+  'Cost is MSRP or a guess and the payout reaches 60% of it: ask for the receipt.',
+  'Sold above cost: Form 8949, on any platform.',
+];
+const FLIP = 50, V0 = 66, VSTEP = 30;
+const VCOLS = '56px 1fr 110px 200px 190px';
+
+// Step 7: sales get recorded quickly, then the tax view walks real sales through the rules.
 export const Books: React.FC = () => {
   const f = useCurrentFrame();
-  const tax = f >= 120;
-  const cols = tax ? '80px 1fr 120px 120px 120px 90px' : '80px 1fr 130px 150px 140px';
+  const tax = f >= FLIP;
+  const active = tax ? Math.floor((f - V0) / VSTEP) : -1;
+  const lit = (r: number) => r === 0 ? f >= V0 - 6 : r === 4 ? f >= V0 + VERDICTS.length * VSTEP : VERDICTS.some((v, i) => i <= active && v.hits.includes(r));
+  const hot = (r: number) => active >= 0 && active < VERDICTS.length && VERDICTS[active].hits.includes(r);
+  const T1 = V0 + VERDICTS.length * VSTEP + 12; // threshold note
+  const T2 = T1 + 50; // summary + photos
   return (
     <Scene>
-      <Step n={7} title={tax ? 'Close the books' : 'Record the sales'} who={tax ? 'The script writes the tax worksheet, then deletes listing photos' : 'Claude reads each order and chat, then writes the record'} />
+      <Step n={7} title={tax ? 'Close the books' : 'Record the sales'} who={tax ? 'Every sale is sorted by the tax rules before anything is written' : 'Claude reads each order and chat, then writes the record'} />
       <Robot style={{position: 'absolute', right: 90, top: 40}} size={110} f={f} />
       <Browser url={tax ? '127.0.0.1:8377/#tax' : '127.0.0.1:8377/#live'} label="Resale dashboard" dark typeFrom={-999}
-        style={{position: 'absolute', left: 80, top: 180, width: tax ? 1120 : 1760, height: 580}}>
+        style={{position: 'absolute', left: 80, top: 180, width: tax ? 1120 : 1760, height: 560}}>
         <div style={{padding: '20px 26px', color: D.text}}>
-          <div style={{display: 'flex', alignItems: 'center', gap: 22, marginBottom: 16}}>
+          <div style={{display: 'flex', alignItems: 'center', gap: 22, marginBottom: 14}}>
             <div style={{fontSize: 28, fontWeight: 800}}>Resale</div>
             <div style={{display: 'flex', gap: 6, background: D.panel, padding: 5, borderRadius: 10, fontSize: 19}}>
               <span style={{padding: '6px 16px', borderRadius: 7, background: tax ? 'none' : D.line, color: tax ? D.dim : D.text}}>For sale</span>
               <span style={{padding: '6px 16px', borderRadius: 7, background: tax ? D.line : 'none', color: tax ? D.text : D.dim}}>Sold & tax</span>
             </div>
-            {tax && <span style={{marginLeft: 'auto', color: D.green, fontSize: 19, fontWeight: 700, opacity: fade(f, 200, 210)}}>✓ tax.csv written</span>}
+            {tax && <span style={{marginLeft: 'auto', color: D.green, fontSize: 19, fontWeight: 700, opacity: fade(f, T2, T2 + 10)}}>✓ tax.csv written</span>}
           </div>
-          <div style={{display: 'grid', gridTemplateColumns: cols, fontSize: 16, color: D.dim, padding: '6px 10px', borderBottom: `1px solid ${D.line}`}}>
-            {tax ? <><span>ID</span><span>Item</span><span style={{textAlign: 'right'}}>Received</span><span style={{textAlign: 'right'}}>Cost</span><span style={{textAlign: 'right'}}>Result</span><span style={{textAlign: 'right'}}>1099-K</span></>
-              : <><span>ID</span><span>Item</span><span>Platform</span><span>Status</span><span style={{textAlign: 'right'}}>Received</span></>}
-          </div>
-          {SALES.map(([id, n, pl, rec, cost, k], i) => {
-            const done = f >= 20 + i * 14;
+          {tax && (
+            <div style={{display: 'grid', gridTemplateColumns: VCOLS, columnGap: 18, fontSize: 16, color: D.dim, padding: '0 16px 8px'}}>
+              <span>ID</span><span>Item</span><span style={{textAlign: 'right'}}>You got</span><span style={{textAlign: 'right'}}>Cost basis</span><span style={{textAlign: 'right'}}>Goes to</span>
+            </div>
+          )}
+          {tax ? VERDICTS.map((v, i) => {
+            const o = fade(f, V0 + i * VSTEP, V0 + i * VSTEP + 10);
+            const on = i === active;
             return (
-              <div key={id} style={{display: 'grid', gridTemplateColumns: cols, fontSize: 21, padding: '11px 10px', borderBottom: `1px solid ${D.line}`, fontVariantNumeric: 'tabular-nums', alignItems: 'center'}}>
-                <span style={{fontFamily: MONO, color: D.dim, fontSize: 16}}>{id}</span><span>{n}</span>
-                {tax ? <>
-                  <span style={{textAlign: 'right'}}>{money(rec)}</span><span style={{textAlign: 'right', color: D.dim}}>{money(cost)}</span>
-                  <span style={{textAlign: 'right', color: D.red}}>loss</span><span style={{textAlign: 'right', color: D.blue}}>{k ? '✓' : '–'}</span>
-                </> : <>
-                  <span>{pl}</span>
-                  <span><span style={{fontSize: 15, fontWeight: 700, padding: '3px 10px', borderRadius: 6, background: done ? '#3d2326' : D.panel, color: done ? D.red : D.dim}}>{done ? 'SOLD' : 'listed'}</span></span>
-                  <span style={{textAlign: 'right', opacity: done ? 1 : 0.2}}>{done ? money(rec) : '—'}</span>
-                </>}
+              <div key={v.id} style={{padding: '12px 14px', borderRadius: 10, marginBottom: 8, background: on ? '#1f2433' : D.panel,
+                outline: on ? `2px solid ${D.accent}` : 'none', opacity: 0.35 + 0.65 * fade(f, V0 + i * VSTEP - 4, V0 + i * VSTEP + 4)}}>
+                <div style={{display: 'grid', gridTemplateColumns: VCOLS, columnGap: 18, alignItems: 'center', fontSize: 22, fontVariantNumeric: 'tabular-nums'}}>
+                  <span style={{fontFamily: MONO, color: D.dim, fontSize: 16}}>{v.id}</span>
+                  <span>{v.name} <span style={{color: D.dim, fontSize: 17}}>· {v.where}</span></span>
+                  <span style={{textAlign: 'right'}}>{money(v.got)}</span>
+                  <span style={{textAlign: 'right', color: D.dim}}>vs {money(v.cost)} <span style={{fontSize: 15}}>{v.src}</span></span>
+                  <span style={{textAlign: 'right', opacity: o}}>
+                    <span style={{fontSize: 16, fontWeight: 800, padding: '4px 12px', borderRadius: 6,
+                      background: v.to === 'sched1' ? '#16343b' : '#22301f', color: v.to === 'sched1' ? D.blue : D.green}}>
+                      {v.to === 'sched1' ? 'BACK OUT · SCH 1' : 'NOT INCOME'}
+                    </span>
+                  </span>
+                </div>
+                <div style={{fontSize: 18, color: D.dim, marginTop: 6, paddingLeft: 74, opacity: o, lineHeight: 1.35}}>{v.why}</div>
               </div>
             );
-          })}
+          }) : (
+            <>
+              <div style={{display: 'grid', gridTemplateColumns: '80px 1fr 130px 150px 140px', fontSize: 16, color: D.dim, padding: '6px 10px', borderBottom: `1px solid ${D.line}`}}>
+                <span>ID</span><span>Item</span><span>Platform</span><span>Status</span><span style={{textAlign: 'right'}}>Received</span>
+              </div>
+              {RECORDED.map(([id, n, pl, rec], i) => {
+                const done = f >= 6 + i * 6;
+                return (
+                  <div key={id} style={{display: 'grid', gridTemplateColumns: '80px 1fr 130px 150px 140px', fontSize: 21, padding: '11px 10px', borderBottom: `1px solid ${D.line}`, fontVariantNumeric: 'tabular-nums', alignItems: 'center'}}>
+                    <span style={{fontFamily: MONO, color: D.dim, fontSize: 16}}>{id}</span><span>{n}</span><span>{pl}</span>
+                    <span><span style={{fontSize: 15, fontWeight: 700, padding: '3px 10px', borderRadius: 6, background: done ? '#3d2326' : D.panel, color: done ? D.red : D.dim}}>{done ? 'SOLD' : 'listed'}</span></span>
+                    <span style={{textAlign: 'right', opacity: done ? 1 : 0.2}}>{done ? money(rec) : '—'}</span>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </div>
       </Browser>
       {tax && (
-        <Card style={{position: 'absolute', left: 1240, top: 180, right: 80, padding: '18px 22px'}}>
-          <div style={{fontSize: 19, fontWeight: 800, color: C.muted, marginBottom: 6}}>CHECKED BEFORE THE TABLE IS WRITTEN</div>
-          {CHECKS.map((c, i) => {
-            const o = fade(f, 130 + i * 13, 138 + i * 13);
-            return (
-              <div key={i} style={{display: 'flex', gap: 12, fontSize: 22, lineHeight: 1.3, padding: '9px 0', borderTop: i ? `1px solid ${C.line}` : 'none', opacity: 0.35 + 0.65 * o}}>
-                <span style={{color: o > 0.5 ? C.ok : C.muted, fontWeight: 800, width: 24}}>{o > 0.5 ? '✓' : '○'}</span><span>{c}</span>
-              </div>
-            );
-          })}
+        <Card style={{position: 'absolute', left: 1240, top: 180, right: 80, padding: '18px 22px', opacity: fade(f, FLIP, FLIP + 10)}}>
+          <div style={{fontSize: 19, fontWeight: 800, color: C.muted, marginBottom: 6}}>THE RULES EACH SALE GOES THROUGH</div>
+          {RULES.map((c, r) => (
+            <div key={r} style={{display: 'flex', gap: 12, fontSize: 21, lineHeight: 1.3, padding: '10px 8px', borderTop: r ? `1px solid ${C.line}` : 'none', borderRadius: 8,
+              background: hot(r) ? C.waitSoft : 'transparent', opacity: lit(r) || hot(r) ? 1 : 0.4}}>
+              <span style={{color: lit(r) ? C.ok : C.muted, fontWeight: 800, width: 24, flex: 'none'}}>{lit(r) ? '✓' : '○'}</span>
+              <span>{c}{r === 4 && lit(4) && <b style={{color: C.muted}}> None this year.</b>}</span>
+            </div>
+          ))}
         </Card>
       )}
-      <div style={{position: 'absolute', left: 80, right: 80, bottom: 46, opacity: fade(f, 200, 210)}}>
-        <div style={{fontSize: 22, fontWeight: 700, color: C.muted, marginBottom: 10}}>Listing photos deleted. The record stays in git for the IRS’s three years.</div>
+      {/* The consideration people miss: who actually gets a 1099-K. */}
+      <Card style={{position: 'absolute', left: 1240, top: 620, right: 80, padding: '16px 22px', background: C.waitSoft, opacity: fade(f, T1, T1 + 12),
+        transform: `translateY(${(1 - fade(f, T1, T1 + 12)) * 20}px)`}}>
+        <div style={{fontSize: 18, fontWeight: 800, color: C.waitInk}}>WHO GETS A 1099-K</div>
+        <div style={{fontSize: 21, lineHeight: 1.35, marginTop: 4}}>Federal rule for 2026: over $20,000 and 200 sales. Some states, like Massachusetts, report from $600. Your config says which platforms send you one.</div>
+      </Card>
+      <div style={{position: 'absolute', left: 80, right: 80, bottom: 40, opacity: fade(f, T2, T2 + 10)}}>
+        <div style={{fontSize: 22, fontWeight: 700, color: C.muted, marginBottom: 10}}>
+          <span style={{color: C.ink}}>2026: 99 sales · 48 on a 1099-K, backed out · 0 above cost, so no Form 8949.</span> Listing photos deleted; records kept for the IRS’s three years.
+        </div>
         <div style={{display: 'flex', gap: 14}}>
           {items.slice(7, 14).map((it, i) => {
-            const s = fade(f, 212 + i * 6, 226 + i * 6);
+            const s = fade(f, T2 + 12 + i * 5, T2 + 24 + i * 5);
             return (
-              <div key={it.uid} style={{flex: 1, height: 70, borderRadius: 12, background: s > 0.5 ? C.card : C.waitSoft, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px',
+              <div key={it.uid} style={{flex: 1, height: 64, borderRadius: 12, background: s > 0.5 ? C.card : C.waitSoft, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px',
                 fontFamily: MONO, fontSize: 16, boxShadow: '0 1px 3px rgba(0,0,0,.12)', overflow: 'hidden', whiteSpace: 'nowrap'}}>
                 {s < 0.5
                   ? <><span style={{width: 30, height: 22, borderRadius: '4px 4px 6px 6px', background: C.wait, flex: 'none'}} /><span>{it.uid}/photos · {it.photos.length}</span></>
