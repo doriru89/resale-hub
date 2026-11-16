@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resale</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --line: #2a2f3e;
+    --text: #e8eaf0; --dim: #8b92a5; --accent: #ffb454;
+    --green: #87d96c; --red: #f07178; --blue: #5ccfe6; --purple: #c3a6ff;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--text); font: 14px/1.4 -apple-system, sans-serif; padding: 24px; }
+  header { display: flex; align-items: center; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+  h1 { font-size: 1.3rem; }
+  .tabs { display: flex; gap: 4px; background: var(--panel); padding: 4px; border-radius: 10px; }
+  .tabs button { background: none; border: 0; color: var(--dim); font: inherit; padding: 6px 16px; border-radius: 7px; cursor: pointer; }
+  .tabs button.on { background: var(--line); color: var(--text); }
+  .tabs button small { color: var(--dim); margin-left: 4px; }
+  header a { color: var(--dim); font-size: 0.8rem; text-decoration: none; margin-left: auto; }
+  section { display: none; } section.on { display: block; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .card b { display: block; font-size: 1.5rem; font-variant-numeric: tabular-nums; margin: 2px 0 4px; }
+  .card .k { color: var(--dim); font-size: 0.78rem; }
+  .card .to { font-size: 0.82rem; }
+  .card.ok b { color: var(--green); }
+
+  .wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+  th { text-align: left; color: var(--dim); font-size: 0.72rem; font-weight: 500; padding: 6px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--line); }
+  tr:hover td { background: var(--panel); }
+  tfoot td { font-weight: 600; border-top: 1px solid var(--dim); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .uid { color: var(--dim); font-family: ui-monospace, monospace; font-size: 0.8rem; }
+  .name { white-space: normal; min-width: 220px; max-width: 340px; }
+  .model { color: var(--dim); font-family: ui-monospace, monospace; font-size: 0.8rem; }
+  .dim { color: var(--dim); }
+  .ask { color: var(--accent); font-weight: 600; }
+  .loss { color: var(--red); }
+  .gain { color: var(--green); font-weight: 600; }
+  .src { font-size: 0.7rem; color: var(--dim); margin-left: 4px; }
+  .src.est { color: var(--accent); }
+  .c { padding: 1px 8px; border-radius: 99px; font-size: 0.72rem; }
+  .c-new { background: #1d3322; color: var(--green); }
+  .c-open_box { background: #20303d; color: var(--blue); }
+  .c-used_good { background: #33301d; color: var(--accent); }
+  .c-acceptable, .c-parts { background: #3d2326; color: var(--red); }
+  .p { padding: 1px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 4px; }
+  .p-on { background: #2a2440; color: var(--purple); }
+  .p-draft { border: 1px dashed var(--line); color: var(--dim); }
+  .k1099 { color: var(--blue); font-size: 0.7rem; margin-left: 4px; }
+  .todo { color: var(--accent); font-size: 0.75rem; }
+  .card.warn { border-color: var(--accent); } .card.warn b { color: var(--accent); }
+  #ask { background: var(--panel); border: 1px solid var(--accent); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; }
+  #ask h3 { font-size: 0.95rem; margin-bottom: 10px; }
+  #ask h3 small { color: var(--dim); font-weight: 400; margin-left: 8px; }
+  #ask input { width: 110px; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font: inherit; text-align: right; }
+  #ask input:focus { outline: none; border-color: var(--accent); }
+  #ask .fill { color: var(--dim); font-size: 0.75rem; cursor: pointer; margin-left: 6px; text-decoration: underline dotted; }
+  #ask .bar { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+  #ask button { background: var(--accent); color: #1a1300; border: 0; border-radius: 7px; padding: 7px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+  #ask button:disabled { opacity: 0.4; cursor: default; }
+  #ask td { border-bottom-color: #262a36; }
+  .err { color: var(--red); margin-top: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Resale</h1>
+  <nav class="tabs">
+    <button data-tab="live">For sale<small id="n-live"></small></button>
+    <button data-tab="tax">Sold &amp; tax<small id="n-sold"></small></button>
+  </nav>
+</header>
+
+<section id="live">
+  <div class="wrap"><table>
+    <thead><tr>
+      <th>UID</th><th>Item</th><th>Model</th><th>Condition</th>
+      <th class="num">MSRP</th><th>Release</th>
+      <th class="num">Used market</th><th class="num">Our price</th><th>Posted on</th>
+    </tr></thead>
+    <tbody id="t-live"></tbody>
+  </table></div>
+</section>
+
+<section id="tax">
+  <div class="cards" id="cards"></div>
+  <div id="ask"></div>
+  <div class="wrap"><table>
+    <thead><tr>
+      <th>UID</th><th>Item</th><th>Condition</th><th>Sold</th><th>Platform</th>
+      <th class="num">Price</th><th class="num">Received</th><th class="num">Cost</th>
+      <th class="num">P/L = received − cost</th><th class="num">Backed out</th><th></th>
+    </tr></thead>
+    <tbody id="t-sold"></tbody>
+    <tfoot id="f-sold"></tfoot>
+  </table></div>
+</section>
+<div class="err" id="err"></div>
+
+<script>
+const NAMES = { ebay: 'eBay', fbmp: 'Facebook', mercari: 'Mercari', swappa: 'Swappa', rednote: 'RedNote',
+  local: 'Local', fredmiranda: 'Fred Miranda', buy_nothing: 'Buy Nothing' };
+const MISSING = { 'acquisition.real_cost': 'real purchase price', 'acquisition.price': 'cost', 'sale.date': 'sale date', 'sale.received': 'amount received', 'sale.order_id': 'order number' };
+const SRC = { msrp: 'MSRP', estimate: 'estimate', seller: 'from seller', receipt: 'receipt', order_page: 'order page' };
+const DASH = '<span class="dim">—</span>';
+const esc = v => (v ?? '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const money = v => v == null ? DASH : (v < 0 ? '−$' : '$') +
+  Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pname = k => NAMES[k] || k;
+const cond = i => i.condition ? `<span class="c c-${i.condition}">${i.condition}</span>` : DASH;
+
+// ---- tabs (remembered in the URL hash) ----
+function show(tab) {
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === tab));
+  history.replaceState(null, '', tab === 'live' ? location.pathname : '#' + tab);
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => show(b.dataset.tab));
+show(location.hash === '#tax' ? 'tax' : 'live');
+
+// ---- for sale ----
+function posted(i) {
+  const ps = Object.entries(i.platforms || {});
+  // a platform price is stored only when it differs from price_ask
+  const price = l => l.price != null ? ` ${money(l.price)}` : '';
+  const split = ps.some(([, l]) => l.price != null);
+  const on = ps.filter(([, l]) => l.status === 'active');
+  const draft = ps.filter(([, l]) => l.status === 'draft');
+  let out = !split && on.length === 2 && on.some(([k]) => k === 'ebay') && on.some(([k]) => k === 'fbmp')
+    ? '<span class="p p-on">Both</span>'
+    : on.map(([k, l]) => `<span class="p p-on">${pname(k)}${price(l)}</span>`).join('');
+  out += draft.map(([k, l]) => `<span class="p p-draft">${pname(k)} draft${price(l)}</span>`).join('');
+  return out || DASH;
+}
+function liveRow(i) {
+  const a = i.acquisition || {};
+  const m = i.price_market;
+  return `<tr><td class="uid">${i.uid}</td>
+    <td class="name">${esc(i.name_zh || i.name_en)}</td>
+    <td class="model">${esc(i.model) || DASH}</td>
+    <td>${cond(i)}</td>
+    <td class="num">${money(i.msrp)}</td>
+    <td>${a.date_basis === 'release_date' && a.date ? a.date : DASH}</td>
+    <td class="num">${m ? `$${m.low}–${m.high}` : DASH}</td>
+    <td class="num ask">${money(i.price_ask)}</td>
+    <td>${posted(i)}</td></tr>`;
+}
+
+// ---- sold & tax ----
+function soldRow(i) {
+  const t = i.tax, s = i.sale, a = i.acquisition || {};
+  const pl = t.gain > 0 ? t.gain : t.net - a.price;
+  const est = a.source === 'estimate' || a.source === 'msrp';
+  return `<tr><td class="uid">${i.uid}</td>
+    <td class="name">${esc(i.name_zh || i.name_en)}</td>
+    <td>${cond(i)}</td>
+    <td class="dim">${s.date || '—'}</td>
+    <td>${pname(s.platform)}${t.on_1099k ? '<span class="k1099">1099-K</span>' : ''}</td>
+    <td class="num">${money(t.gross)}</td>
+    <td class="num">${money(t.net)}</td>
+    <td class="num">${money(a.price)}<span class="src${est ? ' est' : ''}">${SRC[a.source] || ''}</span></td>
+    <td class="num ${pl > 0 ? 'gain' : pl < 0 ? 'loss' : 'dim'}">${pl > 0 ? '+' : ''}${money(pl)}</td>
+    <td class="num">${t.on_1099k ? money(t.offset) : DASH}</td>
+    <td>${t.complete ? '' : `<span class="todo">Missing: ${t.missing.map(m => MISSING[m] || m).join(', ')}</span>`}</td></tr>`;
+}
+function cards(r) {
+  const sum = (xs, f) => xs.reduce((n, x) => n + f(x), 0);
+  const other = Object.entries(r.gross_by_platform).filter(([k]) => k !== 'ebay');
+  const o = r.ebay_orders;
+  return `
+    ${r.problems.length ? `<div class="card warn"><div class="k">Tax table blocked</div>
+      <b>${r.problems.length} problem(s)</b><div class="to">${r.problems.map(p => esc(p).replace(/missing ([\w.]+(, [\w.]+)*)/, (_, m) => 'missing ' + m.split(', ').map(k => MISSING[k] || k).join(', '))).join('<br>')}</div></div>` : ''}
+    <div class="card"><div class="k">1099-K line, top of Schedule 1</div>
+      <b>${money(r.schedule1_1099k_entry)}</b>
+      <div class="to">${o.counted} eBay orders${o.canceled ? ` (${o.canceled} canceled, not counted)` : ''}, all backed out</div></div>
+    <div class="card ${r.gain ? '' : 'ok'}"><div class="k">Gains</div>
+      <b>${money(r.gain)}</b>
+      <div class="to">${r.form_8949.length ? `${r.form_8949.length} go on Form 8949` : 'No Form 8949 needed'}</div></div>
+    <div class="card"><div class="k">Facebook / local / RedNote</div>
+      <b>${money(sum(other, ([, v]) => v))}</b>
+      <div class="to">No 1099-K, nothing to report</div></div>`;
+}
+
+// ---- real purchase price: fill in, copy as commands, paste to Claude ----
+const STORE = 'uv run resale_store.py';
+let asking = [];
+function askForm(sold) {
+  asking = sold.filter(i => i.tax.missing.includes('acquisition.real_cost'));
+  const box = document.getElementById('ask');
+  if (!asking.length) { box.style.display = 'none'; return; }
+  box.style.display = '';
+  box.innerHTML = `<h3>Add the real purchase price: what you <u>paid</u> for it<small>not the sale price · after discounts, plus sales tax and shipping · bought at full price? click "Use list price"</small></h3>
+    <div class="wrap"><table>
+      <thead><tr><th>UID</th><th>Item</th><th>Sold on</th><th class="num">Received</th>
+        <th class="num">Cost on record</th><th class="num">What you paid</th><th class="num">P/L after sale</th></tr></thead>
+      <tbody>${asking.map(i => `<tr>
+        <td class="uid">${i.uid}</td>
+        <td class="name">${esc(i.name_zh || i.name_en)}</td>
+        <td>${pname(i.sale.platform)}</td>
+        <td class="num">${money(i.tax.net)}</td>
+        <td class="num">${money(i.acquisition.price)}<span class="src est">${SRC[i.acquisition.source] || ''}</span></td>
+        <td class="num">$<input type="number" step="0.01" min="0" data-uid="${i.uid}" placeholder="${i.acquisition.price}">
+          <span class="fill" data-fill="${i.uid}">Use list price</span></td>
+        <td class="num" id="res-${i.uid}"><span class="dim">—</span></td></tr>`).join('')}</tbody>
+    </table></div>
+    <div class="bar"><button id="copy" disabled>Copy for Claude</button><span class="dim" id="copied"></span></div>`;
+  box.querySelectorAll('input').forEach(el => el.oninput = askUpdate);
+  box.querySelectorAll('.fill').forEach(el => el.onclick = () => {
+    const inp = box.querySelector(`input[data-uid="${el.dataset.fill}"]`);
+    inp.value = inp.placeholder; askUpdate();
+  });
+  document.getElementById('copy').onclick = askCopy;
+}
+function askValues() {
+  return asking.map(i => ({ i, v: document.querySelector(`#ask input[data-uid="${i.uid}"]`).value.trim() }))
+    .filter(x => x.v !== '' && !isNaN(parseFloat(x.v)));
+}
+function askUpdate() {
+  for (const i of asking) {
+    const v = document.querySelector(`#ask input[data-uid="${i.uid}"]`).value.trim();
+    const cell = document.getElementById('res-' + i.uid);
+    if (v === '' || isNaN(parseFloat(v))) { cell.innerHTML = '<span class="dim">—</span>'; continue; }
+    const pl = Math.round((i.tax.net - parseFloat(v)) * 100) / 100;
+    cell.innerHTML = pl > 0 ? `<span class="gain">gain ${money(pl)} → 8949</span>`
+      : `<span class="${pl < 0 ? 'loss' : 'dim'}">${pl < 0 ? 'loss ' + money(-pl) : 'break-even'}</span>`;
+  }
+  const n = askValues().length;
+  const btn = document.getElementById('copy');
+  btn.disabled = !n;
+  btn.textContent = n ? `Copy for Claude (${n}/${asking.length})` : 'Copy for Claude';
+  document.getElementById('copied').textContent = '';
+}
+async function askCopy() {
+  const lines = askValues().map(({ i, v }) =>
+    `${STORE} set ${i.uid} acquisition.price=${parseFloat(v)} acquisition.source=seller`);
+  const text = `Real purchase prices (after discounts, plus tax and shipping). Write them to the records, then re-run tax:\n` + lines.join('\n');
+  try { await navigator.clipboard.writeText(text); }
+  catch { const t = document.createElement('textarea'); t.value = text; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); }
+  document.getElementById('copied').textContent = `Copied ${lines.length} line(s). Paste them into the chat.`;
+}
+
+async function load() {
+  const [r, rt] = await Promise.all([fetch('/api/inventory?all=1'), fetch('/api/tax')]);
+  const d = await r.json(), tax = await rt.json();
+  const bad = !r.ok ? d : !rt.ok ? tax : null;
+  if (bad) { document.getElementById('err').textContent = bad.error + ': ' + (bad.errors || []).join('; '); return; }
+  const items = d.items.sort((a, b) => a.uid.localeCompare(b.uid));
+  const live = items.filter(i => i.disposition === 'available');
+  const sold = items.filter(i => i.disposition === 'sold' && i.tax)
+    .sort((a, b) => (b.sale.date || '').localeCompare(a.sale.date || ''));
+
+  document.getElementById('t-live').innerHTML = live.map(liveRow).join('');
+  document.getElementById('n-live').textContent = live.length;
+  document.getElementById('n-sold').textContent = sold.length;
+  document.getElementById('cards').innerHTML = cards(tax);
+  document.getElementById('t-sold').innerHTML = sold.map(soldRow).join('');
+  askForm(sold);
+  const sum = f => sold.reduce((n, i) => n + f(i), 0);
+  const orphan = tax.orders_without_item.map(o => `<tr><td class="uid">—</td>
+    <td class="name">Refunded eBay order ${esc(o.order_id)}: ${esc(o.title)}</td><td></td><td></td>
+    <td>eBay<span class="k1099">1099-K</span></td><td class="num">${money(o.gross)}</td>
+    <td></td><td></td><td></td><td class="num">${money(o.gross)}</td><td></td></tr>`).join('');
+  document.getElementById('f-sold').innerHTML = orphan + `<tr><td colspan="5">Total: ${sold.length} items</td>
+    <td class="num">${money(sum(i => i.tax.gross))}</td>
+    <td class="num">${money(sum(i => i.tax.net))}</td>
+    <td class="num">${money(sum(i => i.acquisition.price))}</td>
+    <td class="num loss">${money(sum(i => i.tax.net - i.acquisition.price))}</td>
+    <td class="num">${money(tax.schedule1_1099k_entry)}</td><td></td></tr>`;
+}
+load();
+</script>
+</body>
+</html>

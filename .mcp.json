@@ -1,0 +1,6 @@
+{
+  "resale-browser": {
+    "command": "npx",
+    "args": ["-y", "@playwright/mcp@0.0.85", "--user-data-dir", "${HOME}/.resale-hub/browser-profile"]
+  }
+}

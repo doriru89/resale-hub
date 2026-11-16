@@ -1,0 +1,10 @@
+{
+  "name": "resale-hub",
+  "version": "1.0.0",
+  "description": "Sell your own used things with Claude: photos become eBay, Facebook Marketplace and Mercari drafts, and sales become a reconciled tax worksheet. You press Publish.",
+  "author": {"name": "Austin Zheng", "url": "https://github.com/doriru89"},
+  "homepage": "https://doriru89.github.io/resale-hub/",
+  "repository": "https://github.com/doriru89/resale-hub",
+  "license": "MIT",
+  "keywords": ["resale", "ebay", "facebook-marketplace", "mercari", "taxes", "1099-k", "playwright"]
+}

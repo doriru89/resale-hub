@@ -1,0 +1,6 @@
+node_modules/
+site/dist/
+site/out/
+__pycache__/
+.pytest_cache/
+.DS_Store

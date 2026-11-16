@@ -1,0 +1,26 @@
+{
+  "name": "resale-hub-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "studio": "remotion studio src/remotion/index.ts",
+    "render": "remotion render src/remotion/index.ts ResaleHub out/resale-hub.mp4 --crf=24"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.544",
+    "@remotion/google-fonts": "^4.0.544",
+    "@remotion/player": "^4.0.544",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.544"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21"
+  }
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resale Hub</title>
+<meta name="description" content="A Claude Code skill: photos become marketplace drafts, and sales become a tax worksheet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: one marketplace-style top bar, the film as the hero, four proof points, one closing link. */
+:root{--ground:#f0f2f5;--card:#fff;--ink:#1c1e21;--muted:#65676b;--line:#dadde1;--accent:#1877f2;--accent-ink:#fff;--ok:#31a24c;
+  --font:"Inter",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#18191a;--card:#242526;--ink:#e4e6eb;--muted:#b0b3b8;--line:#3a3b3c;--accent:#4e94f5;--ok:#6fcf73;color-scheme:dark}}
+:root[data-theme="dark"]{--ground:#18191a;--card:#242526;--ink:#e4e6eb;--muted:#b0b3b8;--line:#3a3b3c;--accent:#4e94f5;--ok:#6fcf73;color-scheme:dark}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.5 var(--font)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding-block:10px}
+.in{max-width:1180px;margin:0 auto}
+.bar .in{display:flex;align-items:center;gap:12px}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
+.mark i{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-style:normal}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;border-radius:8px;padding:9px 16px;font-size:15px}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.bar .btn{margin-left:auto}
+main{padding-block:24px 64px;display:grid;gap:28px}
+.film{border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.18);background:#16181c;aspect-ratio:16/9;max-width:100%}
+.lede{display:grid;gap:10px;max-width:780px}
+h1{margin:0;font-size:clamp(28px,4.6vw,48px);line-height:1.08;letter-spacing:-.03em;text-wrap:balance}
+.lede p{margin:0;color:var(--muted);font-size:18px}
+.proof{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.pt{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.1);display:grid;gap:6px;align-content:start}
+.pt b{font-size:19px;line-height:1.25}
+.pt span{color:var(--muted);font-size:14.5px}
+.close{background:var(--card);border-radius:14px;padding:28px;display:grid;gap:14px;justify-items:start;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.close h2{margin:0;font-size:26px;letter-spacing:-.02em}
+.close p{margin:0;color:var(--muted);max-width:62ch}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.fine{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="bar gut"><div class="in">
+  <div class="mark"><i>R</i>Resale Hub</div>
+  <a class="btn" href="https://github.com/doriru89/resale-hub">See the real setup on GitHub</a>
+</div></header>
+<main class="gut"><div class="in" style="display:grid;gap:28px">
+  <div class="film" id="film"></div>
+  <section class="lede">
+    <h1>Take the pictures. Resale Hub does the rest, up to the Publish button.</h1>
+    <p>A Claude Code skill I use to sell my own things. It sorts the photos, identifies each item, prices it from real sold listings, drafts it on every marketplace that fits, and keeps the books when it sells.</p>
+  </section>
+  <section class="proof" aria-label="What it has done">
+    <div class="pt"><b>99 items sold in 2026</b><span>Electronics, cameras, kitchen gear, collectibles. Drafted by Claude, posted by me.</span></div>
+    <div class="pt"><b>Every eBay order reconciled to the cent</b><span>The ledger is checked against the 1099-K before the worksheet is written. A mismatch blocks it.</span></div>
+    <div class="pt"><b>Knows which sales the IRS cares about</b><span>A personal item sold at a loss isn't income. A sale above cost goes on Form 8949. A cost that looks guessed gets a request for the receipt.</span></div>
+    <div class="pt"><b>Nothing goes live without you</b><span>It writes drafts and stops. Publishing, repricing and buyer messages stay with the seller.</span></div>
+  </section>
+  <section class="close">
+    <h2>Explore the full project</h2>
+    <p>The skill, the single-writer store behind it, the dashboard, and how to install it in Claude Code or Codex with a browser you're already signed in to.</p>
+    <div class="row">
+      <a class="btn" href="https://github.com/doriru89/resale-hub">Open the repository</a>
+      <a class="btn ghost" href="https://github.com/doriru89/resale-hub#install">Install guide</a>
+    </div>
+    <p class="fine">Real photos and real 2026 records from my own sales. Marketplace screens are mock-ups, not affiliated with any marketplace. Not tax advice.</p>
+  </section>
+</div></main>
+<script type="module" src="./src/main.tsx"></script>
+</body>
+</html>

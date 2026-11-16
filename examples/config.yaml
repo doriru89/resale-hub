@@ -1,0 +1,4 @@
+# Copy to your data folder ($RESALE_BASE, default ~/resale) and edit.
+filing: single, Texas          # printed on the tax report
+form_1099k: [ebay]             # platforms that send you a 1099-K
+pickup_text: "Pickup at the public library on Main St."   # appended to Facebook listings only

@@ -1,0 +1,186 @@
+[
+ {
+  "uid": "R103",
+  "name": "Shokz OpenRun Pro 2",
+  "cat": "Headphones",
+  "photos": [
+   "img/roll/R103-1.jpg",
+   "img/roll/R103-2.jpg",
+   "img/roll/R103-3.jpg",
+   "img/roll/R103-4.jpg",
+   "img/roll/R103-5.jpg"
+  ]
+ },
+ {
+  "uid": "R104",
+  "name": "Galaxy Buds4",
+  "cat": "Earbuds",
+  "photos": [
+   "img/roll/R104-1.jpg",
+   "img/roll/R104-2.jpg",
+   "img/roll/R104-3.jpg"
+  ]
+ },
+ {
+  "uid": "R105",
+  "name": "FreeBuds Pro 3",
+  "cat": "Earbuds",
+  "photos": [
+   "img/roll/R105-1.jpg",
+   "img/roll/R105-2.jpg",
+   "img/roll/R105-3.jpg",
+   "img/roll/R105-4.jpg",
+   "img/roll/R105-5.jpg",
+   "img/roll/R105-6.jpg",
+   "img/roll/R105-7.jpg",
+   "img/roll/R105-8.jpg",
+   "img/roll/R105-9.jpg"
+  ]
+ },
+ {
+  "uid": "R106",
+  "name": "Beats Fit Pro",
+  "cat": "Earbuds",
+  "photos": [
+   "img/roll/R106-1.jpg",
+   "img/roll/R106-2.jpg",
+   "img/roll/R106-3.jpg",
+   "img/roll/R106-4.jpg",
+   "img/roll/R106-5.jpg"
+  ]
+ },
+ {
+  "uid": "R108",
+  "name": "Insta360 X3",
+  "cat": "Camera",
+  "photos": [
+   "img/roll/R108-1.jpg",
+   "img/roll/R108-2.jpg",
+   "img/roll/R108-3.jpg",
+   "img/roll/R108-4.jpg",
+   "img/roll/R108-5.jpg",
+   "img/roll/R108-6.jpg",
+   "img/roll/R108-7.jpg"
+  ]
+ },
+ {
+  "uid": "R110",
+  "name": "WD easystore 4TB",
+  "cat": "Storage",
+  "photos": [
+   "img/roll/R110-1.jpg",
+   "img/roll/R110-2.jpg",
+   "img/roll/R110-3.jpg",
+   "img/roll/R110-4.jpg",
+   "img/roll/R110-5.jpg"
+  ]
+ },
+ {
+  "uid": "R111",
+  "name": "Seagate 2TB",
+  "cat": "Storage",
+  "photos": [
+   "img/roll/R111-1.jpg",
+   "img/roll/R111-2.jpg",
+   "img/roll/R111-3.jpg",
+   "img/roll/R111-4.jpg",
+   "img/roll/R111-5.jpg"
+  ]
+ },
+ {
+  "uid": "R116",
+  "name": "DJI Mavic Air 2",
+  "cat": "Drone",
+  "photos": [
+   "img/roll/R116-1.jpg",
+   "img/roll/R116-2.jpg",
+   "img/roll/R116-3.jpg",
+   "img/roll/R116-4.jpg",
+   "img/roll/R116-5.jpg",
+   "img/roll/R116-6.jpg",
+   "img/roll/R116-7.jpg",
+   "img/roll/R116-8.jpg",
+   "img/roll/R116-9.jpg",
+   "img/roll/R116-10.jpg",
+   "img/roll/R116-11.jpg",
+   "img/roll/R116-12.jpg",
+   "img/roll/R116-13.jpg",
+   "img/roll/R116-14.jpg"
+  ]
+ },
+ {
+  "uid": "R117",
+  "name": "Razer Kishi V3 Pro",
+  "cat": "Controller",
+  "photos": [
+   "img/roll/R117-1.jpg",
+   "img/roll/R117-2.jpg",
+   "img/roll/R117-3.jpg",
+   "img/roll/R117-4.jpg",
+   "img/roll/R117-5.jpg",
+   "img/roll/R117-6.jpg"
+  ]
+ },
+ {
+  "uid": "R118",
+  "name": "NuPhy Air75 V2",
+  "cat": "Keyboard",
+  "photos": [
+   "img/roll/R118-1.jpg",
+   "img/roll/R118-2.jpg",
+   "img/roll/R118-3.jpg",
+   "img/roll/R118-4.jpg"
+  ]
+ },
+ {
+  "uid": "R119",
+  "name": "Nighthawk CM2000",
+  "cat": "Networking",
+  "photos": [
+   "img/roll/R119-1.jpg",
+   "img/roll/R119-2.jpg",
+   "img/roll/R119-3.jpg",
+   "img/roll/R119-4.jpg",
+   "img/roll/R119-5.jpg"
+  ]
+ },
+ {
+  "uid": "R120",
+  "name": "NuFACE Trinity",
+  "cat": "Beauty",
+  "photos": [
+   "img/roll/R120-1.jpg",
+   "img/roll/R120-2.jpg"
+  ]
+ },
+ {
+  "uid": "R121",
+  "name": "OnePlus Open",
+  "cat": "Phone",
+  "photos": [
+   "img/roll/R121-1.jpg",
+   "img/roll/R121-2.jpg",
+   "img/roll/R121-3.jpg",
+   "img/roll/R121-4.jpg",
+   "img/roll/R121-5.jpg",
+   "img/roll/R121-6.jpg",
+   "img/roll/R121-7.jpg",
+   "img/roll/R121-8.jpg",
+   "img/roll/R121-9.jpg",
+   "img/roll/R121-10.jpg",
+   "img/roll/R121-11.jpg",
+   "img/roll/R121-12.jpg",
+   "img/roll/R121-13.jpg",
+   "img/roll/R121-14.jpg",
+   "img/roll/R121-15.jpg"
+  ]
+ },
+ {
+  "uid": "R115",
+  "name": "Hasselblad XCD 135",
+  "cat": "Lens",
+  "photos": [
+   "img/roll/R115-1.jpg"
+  ]
+ }
+]

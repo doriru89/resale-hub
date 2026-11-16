@@ -1,0 +1,13 @@
+{
+  "name": "resale-hub",
+  "description": "Resale Hub: sell your own used things with Claude, from photos to a reconciled tax worksheet.",
+  "owner": {"name": "Austin Zheng", "url": "https://github.com/doriru89"},
+  "plugins": [
+    {
+      "name": "resale-hub",
+      "source": "./",
+      "description": "Photos become marketplace drafts; sales become a reconciled tax worksheet.",
+      "version": "1.0.0"
+    }
+  ]
+}
