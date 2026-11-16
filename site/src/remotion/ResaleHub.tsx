@@ -10,7 +10,7 @@ import {Books, Drafts, End, Price, PublishSold} from './scenes-close';
 const XF = 12;
 export const SCENES: [React.FC, number, boolean][] = [
   [Hook, 175, false], [Intro, 77, true], [Roll, 119, false], [Identify, 252, false], [Price, 165, true],
-  [Drafts, 165, true], [PublishSold, 158, true], [Books, 345, true], [End, 120, false],
+  [Drafts, 165, true], [PublishSold, 136, true], [Books, 345, true], [End, 120, false],
 ];
 export const DURATION = SCENES.reduce((a, [, d, x]) => a + d - (x ? XF : 0), 0);
 export const FPS = 30;

@@ -160,23 +160,23 @@ export const PublishSold: React.FC = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const asset = useAsset();
-  const later = fade(f, 74, 84);
-  const cx = interpolate(f, [8, 34], [1500, 1080], clamp), cy = interpolate(f, [8, 34], [1060, 952], clamp);
-  const clicked = f >= 38;
+  const later = fade(f, 52, 62);
+  const cx = interpolate(f, [4, 15], [1500, 1080], clamp), cy = interpolate(f, [4, 15], [1060, 952], clamp);
+  const clicked = f >= 18;
   return (
     <Scene>
       <div style={{opacity: 1 - later}}><Step n={5} title="You press Publish" who="One review, one click. Only you post." human /></div>
-      <div style={{opacity: later, position: 'absolute', inset: 0}}>{f >= 74 && <Step n={6} title="Two weeks later" who="Most of it sold" human />}</div>
+      <div style={{opacity: later, position: 'absolute', inset: 0}}>{f >= 52 && <Step n={6} title="Two weeks later" who="Most of it sold" human />}</div>
       <div style={{position: 'absolute', left: 80, right: 80, top: 190, display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 20}}>
         {items.map((it, i) => {
-          const live = spring({frame: f - 40 - i * 1.5, fps, config: {damping: 14}});
-          const sold = spring({frame: f - 86 - i * 3, fps, config: {damping: 12}});
+          const live = spring({frame: f - 19 - i * 1.5, fps, config: {damping: 14}});
+          const sold = spring({frame: f - 64 - i * 3, fps, config: {damping: 12}});
           return (
             <div key={it.uid} style={{position: 'relative'}}>
               <Img src={asset(it.photos[0])} style={{width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 12}} />
               <span style={{position: 'absolute', right: 10, top: 10, fontSize: 16, fontWeight: 800, padding: '3px 10px', borderRadius: 6,
                 background: live > 0.5 ? C.ok : C.accentSoft, color: live > 0.5 ? '#fff' : C.accent, opacity: 1 - later}}>{live > 0.5 ? 'LIVE' : 'DRAFT'}</span>
-              {f >= 86 && <Stamp p={sold} style={{left: 12, top: 12}} />}
+              {f >= 64 && <Stamp p={sold} style={{left: 12, top: 12}} />}
               <div style={{fontSize: 20, fontWeight: 700, marginTop: 6}}>{it.name}</div>
             </div>
           );
@@ -184,14 +184,14 @@ export const PublishSold: React.FC = () => {
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 920, display: 'flex', justifyContent: 'center', opacity: 1 - later}}>
         <div style={{background: clicked ? C.ok : C.accent, color: '#fff', fontSize: 30, fontWeight: 800, borderRadius: 14, padding: '18px 40px',
-          transform: `scale(${f > 34 && f < 40 ? 0.95 : 1})`}}>{clicked ? '✓ 14 listings live' : 'Publish 14 reviewed drafts'}</div>
+          transform: `scale(${f > 15 && f < 19 ? 0.95 : 1})`}}>{clicked ? '✓ 14 listings live' : 'Publish 14 reviewed drafts'}</div>
       </div>
-      <svg width="44" height="54" viewBox="0 0 22 27" style={{position: 'absolute', left: cx, top: cy, opacity: 1 - fade(f, 60, 70), filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.35))'}}>
+      <svg width="44" height="54" viewBox="0 0 22 27" style={{position: 'absolute', left: cx, top: cy, opacity: 1 - fade(f, 36, 44), filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.35))'}}>
         <path d="M1 1 L1 22 L7 16 L11 25 L15 23 L11 15 L19 15 Z" fill="#fff" stroke="#1c1e21" strokeWidth="1.6" strokeLinejoin="round" />
       </svg>
-      <Clock f={f} from={68} to={88} />
-      {f >= 118 && (
-        <div style={{position: 'absolute', right: 80, top: 930, opacity: fade(f, 118, 128), background: C.accent, color: '#fff', borderRadius: 24, padding: '16px 26px', fontSize: 30}}>
+      <Clock f={f} from={46} to={66} />
+      {f >= 96 && (
+        <div style={{position: 'absolute', right: 80, top: 930, opacity: fade(f, 96, 106), background: C.accent, color: '#fff', borderRadius: 24, padding: '16px 26px', fontSize: 30}}>
           <b style={{opacity: 0.75, fontSize: 21, marginRight: 10}}>You</b>Most of it sold. Update my sales.
         </div>
       )}
